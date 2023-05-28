@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, ExtCtrls, TeeProcs, TeEngine, Chart, DbChart, Grids, DBGrids,
-  StdCtrls, Buttons, DB, ADODB, Series;
+  StdCtrls, Buttons, DB, ADODB, Series, DBTables, frxClass, frxDBSet;
 
 type
   TForm1 = class(TForm)
@@ -19,9 +19,18 @@ type
     b3: TButton;
     b4: TButton;
     b2: TBitBtn;
+    frxdbdtst1: TfrxDBDataset;
+    frxrprt1: TfrxReport;
+    qry2: TQuery;
+    frxdbdtst2: TfrxDBDataset;
+    frxrprt2: TfrxReport;
     procedure b1Click(Sender: TObject);
     procedure b3Click(Sender: TObject);
     procedure FormShow(Sender: TObject);
+    procedure b2Click(Sender: TObject);
+    procedure frxrprt1ClickObject(View: TfrxView; Button: TMouseButton;
+      Shift: TShiftState; var Modified: Boolean);
+    procedure b4Click(Sender: TObject);
   private
     { Private declarations }
   public
@@ -32,6 +41,8 @@ var
   Form1: TForm1;
 
 implementation
+
+uses Ujadwal;
 
 {$R *.dfm}
 
@@ -70,6 +81,28 @@ dg1.Columns[3].Width:=90;
 dg1.Columns[5].Width:=50;
 dg1.Columns[6].Width:=110;
 dg1.Columns[7].Width:=90;
+end;
+
+procedure TForm1.b2Click(Sender: TObject);
+begin
+    frxrprt1.ShowReport();
+end;
+
+procedure TForm1.frxrprt1ClickObject(View: TfrxView;
+  Button: TMouseButton; Shift: TShiftState; var Modified: Boolean);
+begin
+          if view.name ='Memo 7' then
+          begin
+            qry2.SQL.Clear;
+            qry2.SQL.Add('"select * form jadwal_table where kelas"'+View.TagStr+'""');
+            qry2.Open;
+            frxrprt2.ShowReport();
+          end;
+end;
+
+procedure TForm1.b4Click(Sender: TObject);
+begin
+form2.showmodal;
 end;
 
 end.
